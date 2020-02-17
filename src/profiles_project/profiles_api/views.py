@@ -3,9 +3,10 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import status
 
 from . import serializers
-from rest_framework import status
+from . import models
 # Create your views here.
 
 class HelloApiView(APIView):
@@ -55,10 +56,12 @@ class HelloApiView(APIView):
 
 class HelloViewSet(viewsets.ViewSet):
     """ Test API ViewSet"""
+
     serializer_class = serializers.HelloSerializer
 
     def list(self, request):
         """Return a hello message."""
+
         a_viewset = [
             "Uses actions (list, create, retrieve, update, partial_update)",
             "Automatically maps to URLs using Routers",
@@ -67,6 +70,7 @@ class HelloViewSet(viewsets.ViewSet):
         return Response({"message": "Hello!", "a_viewset": a_viewset})
     def create(self, request):
         """ Create a new hello message."""
+
         serializer = serializers.HelloSerializer(data=request.data)
 
         if serializer.is_valid():
@@ -78,16 +82,26 @@ class HelloViewSet(viewsets.ViewSet):
 
     def retrive(self, request, pk=None):
         """Handles getting an object by its ID."""
+
         return Response({"http_method": "GET"})
 
     def update(self, request, pk=None):
         """ Handles updatin an object."""
+
         return Response({"http_method": "PUT"})
 
     def partial_update(self, request, pk=None):
         """ Handles updating part of an object."""
+
         return Response({"http_methon": "PATCH"})
 
     def delete(self, request, pk=None):
         """ Handles removing an object."""
+
         return Response({"http_method": "DELETE"})
+
+class UserProfileViewSet(viewsets.ModelViewSet):
+    """Handles creating,reading and updating profiles"""
+
+    serializer_class = serializers.UserProfileSerializer
+    queryset = models.UserProfile.objects.all()
